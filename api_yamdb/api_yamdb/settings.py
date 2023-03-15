@@ -1,5 +1,11 @@
+import os
 from datetime import timedelta
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -37,12 +43,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'api_yamdb.urls'
-STATICFILES_DIRS = ((BASE_DIR / 'static/'),)
+# STATICFILES_DIRS = ((BASE_DIR / 'static/'),)
 TEMPLATES_DIR = BASE_DIR / 'templates'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATES_DIR, *STATICFILES_DIRS],
+        'DIRS': [TEMPLATES_DIR, ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -60,8 +66,12 @@ WSGI_APPLICATION = 'api_yamdb.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.getenv('DB_ENGINE', default='django.db.backends.postgresql'),
+        'NAME': os.getenv('DB_NAME', default='postgres'),
+        'USER': os.getenv('POSTGRES_USER', default='postgres'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='postgres'),
+        'HOST': os.getenv('DB_HOST', default='db'),
+        'PORT': os.getenv('DB_PORT', default=5432)
     }
 }
 
@@ -109,7 +119,9 @@ SIMPLE_JWT = {
 }
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-STATICFILES_DIRS = ((BASE_DIR / 'static/'),)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = "users.User"
