@@ -1,5 +1,5 @@
 
-version: '3.8'
+version: '3'
 
 services:
   db:
@@ -9,7 +9,7 @@ services:
     env_file:
       - ./.env
   web:
-    build: bacep/api_yambd:latest
+    build: bacep/api_yamdb:latest
     restart: always
     volumes:
       - static_value:/app/static/
